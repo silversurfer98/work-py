@@ -81,3 +81,6 @@ project(prmix VERSION 0.1)
 add_executable(output PR_mix.h PR_mix.cpp approach2.cpp)
 
 ```
+
+In some endpoints --> cisco repeated read and write raises as ransomeware
+so julia precompilation does not work.

@@ -1,0 +1,43 @@
+HEADER
+Rags
+gips calculation number
+1234567
+tube dimensions OD,ID (m)
+0.03175   0.02143
+length                  (m)
+6.0
+print frequency
+20
+integration points
+5
+tube count
+1111
+total flow               (kmol/hr)
+20230.6604
+gas temperatures in and out (°C)
+475.0   350.0
+heat capacities in and out  (kcal/kmol °C)
+8.742   7.7483
+shell film coefficients in and out (kcal/hr m^2 °C)
+49010.7868   15757.1688
+tube film coefficients in and out (kcal/hr m^2 °C)
+767.7072   722.3537
+water temperature 
+327.203
+gas density                 (kg/m^3)
+4.3156
+gas molecular weight        (kg/kmol)
+12.9413
+gas viscosity               (cP)
+0.0453
+steel conductivity          (kcal/ m hr °C)
+31.0
+SHELL SIDE FOULING          (m^2 hr °C/kcal)
+0.0001
+TUBE SIDE FOULING           (m^2 hr °C/kcal)
+0.0005
+INCLUDE ENHANCED HEAT TRANSFER IN INLET
+!INCLUDE GAP BETWEEN LINER AND TUBE WITH GAPSIZE AND CONDUCTIVITY
+!0.0005 8.0
+!INCLUDE LINER WITH THICKNESS AND CONDUCTIVITY
+!0.003 12

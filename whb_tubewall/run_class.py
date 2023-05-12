@@ -3,6 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
 import shutil
+from scipy.interpolate import interp1d as ip
 
 class whb:
     def __init__(self,ss,ts,k,temp,*args):
@@ -140,7 +141,7 @@ class whb:
         count = count + 1
         if count>0:
             coat_len = len[count]
-            print("we need cladding upto %2.2f for shell side fouling: %1.7f and tube side fouling: %1.7f \n" %(len[count],fouling[0], fouling[1]))
+            print("we need cladding upto %2.2f for shell side fouling: %1.7f and tube side fouling: %1.7f" %(len[count],fouling[0], fouling[1]))
         else:
             print("we dont need any coating for shell side fouling: %1.7f and tube side fouling: %1.7f \n" %(fouling[0], fouling[1])) 
 
@@ -148,21 +149,31 @@ class whb:
     
 
     def plot_data(self, len, temp, fouling, coat_len):
+        draw_line = False
+        if np.amax(temp) >= self.max_t:
+            fs = ip(temp, len, kind='cubic')
+            len_at_400 = fs(self.max_t)
+            print("Lenght of cladding at %3.2f temeprature is %2.2f \n" %(self.max_t, len_at_400))
+            draw_line = True
         plt.plot(len, temp)
         label = "Temperature profile graph at U-shell = " + str(fouling[0]) + " and U-tube = " + str(fouling[1])
         plt.title(label)
         plt.xlabel("Tube length -> m")
         plt.ylabel("Temperature -> Deg C")
-        plt.axhline(y=self.max_t, color="red", linestyle="-")
-        plt.axvline(x=coat_len, color="green", linestyle=":")
+        if draw_line:
+            plt.axhline(y=self.max_t, color="red", linestyle="-")
+            plt.axvline(x=coat_len, color="green", linestyle=":")
+            plt.axvline(x=len_at_400, color="blue", linestyle=":")
         plt.show()
 
     def do_stuff(self):
         for i in self.fileno:
+            print("Case no --> %i \n" %i)
             self.create_input(self.fouling[i-1])
             self.execute(i)
             len, temp, coat_len = self.create_data(i, self.fouling[i-1])
             self.plot_data(len,temp,self.fouling[i-1],coat_len)
+            print("\n-------------------------------------------------------------------")
 
 
 def main():
@@ -179,9 +190,14 @@ def main():
     ts = float(input("Enter the tube side fouling factor : "))
     k = float(input("Enter tube k conductivity : "))
     max_t = float(input("Enter enter max tube wall temperature : "))
+    print("\n\n")
+    print("****************  RESULTS ***********************\n")
+
 
     my_whb = whb(ss,ts,k,max_t)
     my_whb.do_stuff()
+
+    print("\n\n**********************************************\n")
 
 if __name__ == "__main__":
     main()

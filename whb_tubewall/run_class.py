@@ -17,6 +17,10 @@ class whb:
         self.calcno = 123456
         self.command = "whb.exe"
 
+        self.temp = []
+        self.coat_len = []
+        self.len = []
+
         self.fouling = [[0,0],[0,self.ts],[self.ss,0],[self.ss,self.ts]]
         self.fileno = [1,2,3,4]
 
@@ -175,6 +179,53 @@ class whb:
             self.plot_data(len,temp,self.fouling[i-1],coat_len)
             print("\n-------------------------------------------------------------------")
 
+    def updated_do_stuff(self):
+        for i in self.fileno:
+            print("Case no --> %i \n" %i)
+            self.create_input(self.fouling[i-1])
+            self.execute(i)
+            len, temp, coat_len = self.create_data(i, self.fouling[i-1])
+            self.len.append(len)
+            self.temp.append(temp)
+            self.coat_len.append(coat_len)
+
+    def updated_plot_data(self):
+        draw_line = False
+        fig, axes = plt.subplots(2,2, figsize=(12,12))
+        fig.text(0.5, 0.95, 'Temperature profile graph', ha='center', fontsize=20)
+        fig.text(0.5, 0.05, 'Length [m]', ha='center', fontsize=15)
+        fig.text(0.05, 0.5, 'Temperature [$\degree$C]', rotation=90, va='center', fontsize=15)
+        count = 0
+        print("\n\n-------- Interpolated outputs ------------ \n\n")
+        for i in range(0,2):
+            for j in range(0,2):
+                draw_line = False
+                if np.amax(self.temp[count]) >= self.max_t:
+                    fs = ip(self.temp[count], self.len[count], kind='cubic')
+                    len_at_400 = fs(self.max_t)
+                    print("Lenght of cladding at %3.2f temeprature is %2.2f \n" %(self.max_t, len_at_400))
+                    draw_line = True
+
+                label = "$f_{shell}$ = " + str(self.fouling[count][0]) + " and $f_{tube}$ = " + str(self.fouling[count][1])
+
+                axes[i][j].plot(self.len[count], self.temp[count], 'o-', label=label, ms=3)
+                axes[i][j].legend()
+                if draw_line:
+                    s = '\n'.join((r'$T_{%1.1f} =  %1.2f m$' %(self.max_t, len_at_400), r'$T_{coat-len} = %1.2f m$' %(self.coat_len[count])))
+                    axes[i][j].text(0.65,0.3,s,transform = axes[i][j].transAxes,fontsize=10, bbox=dict(facecolor='white', edgecolor='red'))
+                    axes[i][j].axhline(y=self.max_t, color="red", linestyle="-")
+                    axes[i][j].axvline(x=self.coat_len[count], color="green", linestyle=":")
+                    axes[i][j].axvline(x=len_at_400, color="blue", linestyle=":")
+
+                count = count + 1
+        plt.show()
+
+
+    def print_all(self):
+        print(self.len)
+        print(self.temp)
+        print(self.coat_len)
+
 
 def main():
     print("\n\n**************** This program is to make my life easier ************\n")
@@ -184,7 +235,7 @@ def main():
     # ss=0.0001
     # ts=0.0005
     # k=31.0
-    # max_t=400.0
+    # max_t=350.0
 
     ss = float(input("Enter the shell side fouling factor : "))
     ts = float(input("Enter the tube side fouling factor : "))
@@ -195,7 +246,10 @@ def main():
 
 
     my_whb = whb(ss,ts,k,max_t)
-    my_whb.do_stuff()
+    # my_whb.do_stuff()
+
+    my_whb.updated_do_stuff()
+    my_whb.updated_plot_data()
 
     print("\n\n**********************************************\n")
 

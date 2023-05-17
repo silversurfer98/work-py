@@ -1,7 +1,7 @@
 HEADER
 Rags
 gips calculation number
-1234567
+123456
 tube dimensions OD,ID (m)
 0.03175   0.02143
 length                  (m)

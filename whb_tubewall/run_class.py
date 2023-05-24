@@ -20,6 +20,7 @@ class whb:
         self.temp = []
         self.coat_len = []
         self.len = []
+        self.avg_wall_temp = []
 
         self.fouling = [[0,0],[0,self.ts],[self.ss,0],[self.ss,self.ts]]
         self.fileno = [1,2,3,4]
@@ -151,6 +152,14 @@ class whb:
 
         return len, temp, coat_len
     
+    def get_avg_wall_t(self, fileno):
+        filename_out = "output" + str(fileno) + ".txt"
+        with open(filename_out) as f:
+            lines = f.readlines()
+        avgt = str(lines[-6])
+        ans = float(avgt.replace('  AVERAGE WALL TEMPERATURE    ', ''))
+        return ans
+    
 
     def plot_data(self, len, temp, fouling, coat_len):
         draw_line = False
@@ -188,6 +197,7 @@ class whb:
             self.len.append(len)
             self.temp.append(temp)
             self.coat_len.append(coat_len)
+            self.avg_wall_temp.append(self.get_avg_wall_t(i))
 
     def updated_plot_data(self):
         draw_line = False
@@ -209,6 +219,11 @@ class whb:
                 label = "$f_{shell}$ = " + str(self.fouling[count][0]) + " and $f_{tube}$ = " + str(self.fouling[count][1])
 
                 axes[i][j].plot(self.len[count], self.temp[count], 'o-', label=label, ms=3)
+                # tt = fr'T_Avg_wall = {self.avg_wall_temp[count]:3.2f}'
+                tt = r'$T_{avg wall} =  %3.2f \degree C$' %(self.avg_wall_temp[count])
+
+                axes[i][j].text(0.65,0.5,tt,transform = axes[i][j].transAxes,fontsize=10, bbox=dict(facecolor='white', edgecolor='green'))
+
                 axes[i][j].legend()
                 if draw_line:
                     s = '\n'.join((r'$T_{%1.1f} =  %1.2f m$' %(self.max_t, len_at_400), r'$T_{coat-len} = %1.2f m$' %(self.coat_len[count])))
@@ -219,6 +234,7 @@ class whb:
 
                 count = count + 1
         plt.show()
+        fig.savefig('graph_result.pdf')
 
 
     def print_all(self):
@@ -235,7 +251,7 @@ def main():
     # ss=0.0001
     # ts=0.0005
     # k=31.0
-    # max_t=350.0
+    # max_t=400.0
 
     ss = float(input("Enter the shell side fouling factor : "))
     ts = float(input("Enter the tube side fouling factor : "))

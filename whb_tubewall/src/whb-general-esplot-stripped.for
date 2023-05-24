@@ -33,7 +33,7 @@ C
 C     Open output files to save simulation data and enable plotting
 C
 
-      OPEN(10,FILE='OUTPUT1.DAT')
+C      OPEN(10,FILE='OUTPUT1.DAT')
       OPEN(11,FILE='TEMPERATUREPROFILE.TXT')
 C
 C     Set up problem

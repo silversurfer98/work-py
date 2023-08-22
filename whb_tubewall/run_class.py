@@ -22,6 +22,7 @@ class whb:
         self.len = []
         self.avg_wall_temp = []
         self.mech_design_temp = []
+        self.Is_des_t_addition_normal = True
 
         self.fouling = [[0,0],[0,self.ts],[self.ss,0],[self.ss,self.ts]]
         self.fileno = [1,2,3,4]
@@ -145,6 +146,7 @@ class whb:
         m_des_t = (np.max(temp) + np.max(temp2))/2
         if m_des_t >= 400:
             m_des_t = m_des_t + 20
+            self.Is_des_t_addition_normal = False
         else:
             m_des_t = m_des_t + 30
 
@@ -231,7 +233,10 @@ class whb:
 
                 axes[i][j].plot(self.len[count], self.temp[count], 'o-', label=label, ms=3)
                 # tt = fr'T_Avg_wall = {self.avg_wall_temp[count]:3.2f}'
-                tt = '\n'.join((r'$T_{avg wall} =  %3.2f \degree C$' %(self.avg_wall_temp[count]), r'$T_{M-Design} = %.2f \degree C$' %(self.mech_design_temp[count])))
+                if self.Is_des_t_addition_normal:
+                    tt = '\n'.join((r'$T_{avg wall} =  %3.2f \degree C$' %(self.avg_wall_temp[count]), r'$T_{M-Design_{+30 \degree C}} = %.2f \degree C$' %(self.mech_design_temp[count])))
+                else:
+                    tt = '\n'.join((r'$T_{avg wall} =  %3.2f \degree C$' %(self.avg_wall_temp[count]), r'$T_{M-Design_{+20 \degree C}} = %.2f \degree C$' %(self.mech_design_temp[count])))
 
                 axes[i][j].text(0.65,0.5,tt,transform = axes[i][j].transAxes,fontsize=10, bbox=dict(facecolor='white', edgecolor='green'))
 

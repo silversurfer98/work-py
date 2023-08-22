@@ -21,6 +21,7 @@ class whb:
         self.coat_len = []
         self.len = []
         self.avg_wall_temp = []
+        self.mech_design_temp = []
 
         self.fouling = [[0,0],[0,self.ts],[self.ss,0],[self.ss,self.ts]]
         self.fileno = [1,2,3,4]
@@ -130,13 +131,18 @@ class whb:
 
         l=[]
         t=[]
+        t2=[]
         for i in h:
             j = i.split('        ')
             l.append(float(j[0]))
             t.append(float(j[1]))
+            t2.append(float(j[2]))
 
         len = np.array(l, dtype=float)
         temp = np.array(t, dtype=float)
+        temp2 = np.array(t2, dtype=float)
+
+        m_des_t = (np.max(temp) + np.max(temp2))/2 
 
         coat_len = 0.0
         count = -1
@@ -150,7 +156,7 @@ class whb:
         else:
             print("we dont need any coating for shell side fouling: %1.7f and tube side fouling: %1.7f \n" %(fouling[0], fouling[1])) 
 
-        return len, temp, coat_len
+        return len, temp, coat_len, m_des_t
     
     def get_avg_wall_t(self, fileno):
         filename_out = "output" + str(fileno) + ".txt"
@@ -193,10 +199,11 @@ class whb:
             print("Case no --> %i \n" %i)
             self.create_input(self.fouling[i-1])
             self.execute(i)
-            len, temp, coat_len = self.create_data(i, self.fouling[i-1])
+            len, temp, coat_len, mech_des_t = self.create_data(i, self.fouling[i-1])
             self.len.append(len)
             self.temp.append(temp)
             self.coat_len.append(coat_len)
+            self.mech_design_temp.append(mech_des_t)
             self.avg_wall_temp.append(self.get_avg_wall_t(i))
 
     def updated_plot_data(self):
@@ -226,7 +233,8 @@ class whb:
 
                 axes[i][j].legend()
                 if draw_line:
-                    s = '\n'.join((r'$T_{%1.1f} =  %1.2f m$' %(self.max_t, len_at_400), r'$T_{coat-len} = %1.2f m$' %(self.coat_len[count])))
+                    s = '\n'.join((r'$T_{%1.1f} =  %1.2f m$' %(self.max_t, len_at_400), r'$T_{coat-len} = %1.2f m$' %(self.coat_len[count]), 
+                                   r'$T_{M-Design} = %.2f \degree C$' %(self.mech_design_temp[count])))
                     axes[i][j].text(0.65,0.3,s,transform = axes[i][j].transAxes,fontsize=10, bbox=dict(facecolor='white', edgecolor='red'))
                     axes[i][j].axhline(y=self.max_t, color="red", linestyle="-")
                     axes[i][j].axvline(x=self.coat_len[count], color="green", linestyle=":")

@@ -3,33 +3,33 @@ Rags
 gips calculation number
 123456
 tube dimensions OD,ID (m)
-0.03175   0.02143
+0.0381   0.02368
 length                  (m)
-6.0
+4.51
 print frequency
 20
 integration points
 5
 tube count
-1111
+1417
 total flow               (kmol/hr)
-20230.6604
+21495.6065
 gas temperatures in and out (°C)
-475.0   350.0
+1050.0   474.0
 heat capacities in and out  (kcal/kmol °C)
-8.742   7.7483
+8.6899   7.7099
 shell film coefficients in and out (kcal/hr m^2 °C)
-49010.7868   15757.1688
+110654.9954   37410.1999
 tube film coefficients in and out (kcal/hr m^2 °C)
-767.7072   722.3537
+642.1699   514.8644
 water temperature 
-327.203
+324.6861
 gas density                 (kg/m^3)
-4.3156
+3.8203
 gas molecular weight        (kg/kmol)
-12.9413
+13.1989
 gas viscosity               (cP)
-0.0453
+0.0455
 steel conductivity          (kcal/ m hr °C)
 31.0
 SHELL SIDE FOULING          (m^2 hr °C/kcal)

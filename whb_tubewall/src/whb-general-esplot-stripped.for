@@ -33,7 +33,7 @@ C
 C     Open output files to save simulation data and enable plotting
 C
 
-C      OPEN(10,FILE='OUTPUT1.DAT')
+      OPEN(10,FILE='OUTPUT1.DAT')
       OPEN(11,FILE='TEMPERATUREPROFILE.TXT')
 C
 C     Set up problem
@@ -66,7 +66,7 @@ C
       FLUX = UALL*(T(1)-TW)
       WRITE(6,90) X0,T(1),TM1,TM2,TMEAN,TLI,TLO,UALL,FLUX
       WRITE(10,90) X0,T(1),TM1,TM2,TMEAN,TLI,TLO,UALL,FLUX
-      WRITE(11,*) X0,TM1
+      WRITE(11,*) X0,TM1,TM2
 C   
       TMEANS = 0.0D0
       DO 10 I = 1,NPR
@@ -78,7 +78,7 @@ C
 	  QTOT = QTOT + QTIL 
 	  WRITE(6,90) X0,T(1),TM1,TM2,TMEAN,TLI,TLO,UALL,FLUX
 	  WRITE(10,90) X0,T(1),TM1,TM2,TMEAN,TLI,TLO,UALL,FLUX,QTIL,QAVG
-	  WRITE(11,*) X0,TM1
+	  WRITE(11,*) X0,TM1,TM2
 	  IF (I .EQ. 1) THEN
 	    TMEANS = TMEAN*0.5D0
 	  ELSE

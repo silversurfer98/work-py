@@ -231,14 +231,13 @@ class whb:
 
                 axes[i][j].plot(self.len[count], self.temp[count], 'o-', label=label, ms=3)
                 # tt = fr'T_Avg_wall = {self.avg_wall_temp[count]:3.2f}'
-                tt = r'$T_{avg wall} =  %3.2f \degree C$' %(self.avg_wall_temp[count])
+                tt = '\n'.join((r'$T_{avg wall} =  %3.2f \degree C$' %(self.avg_wall_temp[count]), r'$T_{M-Design} = %.2f \degree C$' %(self.mech_design_temp[count])))
 
                 axes[i][j].text(0.65,0.5,tt,transform = axes[i][j].transAxes,fontsize=10, bbox=dict(facecolor='white', edgecolor='green'))
 
                 axes[i][j].legend()
                 if draw_line:
-                    s = '\n'.join((r'$T_{%1.1f} =  %1.2f m$' %(self.max_t, len_at_400), r'$T_{coat-len} = %1.2f m$' %(self.coat_len[count]), 
-                                   r'$T_{M-Design} = %.2f \degree C$' %(self.mech_design_temp[count])))
+                    s = '\n'.join((r'$T_{%1.1f} =  %1.2f m$' %(self.max_t, len_at_400), r'$T_{coat-len} = %1.2f m$' %(self.coat_len[count])))
                     axes[i][j].text(0.65,0.3,s,transform = axes[i][j].transAxes,fontsize=10, bbox=dict(facecolor='white', edgecolor='red'))
                     axes[i][j].axhline(y=self.max_t, color="red", linestyle="-")
                     axes[i][j].axvline(x=self.coat_len[count], color="green", linestyle=":")

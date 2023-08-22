@@ -142,7 +142,11 @@ class whb:
         temp = np.array(t, dtype=float)
         temp2 = np.array(t2, dtype=float)
 
-        m_des_t = (np.max(temp) + np.max(temp2))/2 
+        m_des_t = (np.max(temp) + np.max(temp2))/2
+        if m_des_t >= 400:
+            m_des_t = m_des_t + 20
+        else:
+            m_des_t = m_des_t + 30
 
         coat_len = 0.0
         count = -1
